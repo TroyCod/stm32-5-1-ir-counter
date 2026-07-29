@@ -3,7 +3,6 @@
 
 #include "stm32f10x.h"
 
-void Encoder_Init(void);
-int8_t Encoder_GetDirection(void);
+/* 注意: EXTI1_IRQHandler 在 main.c 中实现 */
 
 #endif

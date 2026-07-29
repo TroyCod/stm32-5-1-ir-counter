@@ -3,9 +3,6 @@
 
 #include "stm32f10x.h"
 
-void Infrared_Init(void);
-uint32_t Infrared_GetCount(void);
-void Infrared_SetCount(uint32_t count);
-void Infrared_ResetCount(void);
+/* 注意: EXTI0_IRQHandler 在 main.c 中实现 */
 
 #endif
