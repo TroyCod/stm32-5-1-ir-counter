@@ -28,10 +28,17 @@ void EXTI1_IRQHandler(void)
 
 int main(void)
 {
-    uint32_t display = 0, lastIR = 0;
+    int32_t  display = 0;
+    uint32_t lastIR  = 0;
     GPIO_InitTypeDef g;
     EXTI_InitTypeDef e;
     NVIC_InitTypeDef n;
+
+    /* 调试模式配置：保持调试功能在低功耗模式下可用，下载后无需重新插拔 */
+    DBGMCU_Config(DBGMCU_SLEEP | DBGMCU_STOP | DBGMCU_STANDBY, ENABLE);
+
+    /* 上电稳定延时，确保调试器在复位后能正常连接 */
+    for (volatile uint32_t i = 0; i < 500000; i++);
 
     /* 时钟 */
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB | RCC_APB2Periph_AFIO, ENABLE);
@@ -78,15 +85,16 @@ int main(void)
     {
         if (IR_Count != lastIR)
         {
-            display += (IR_Count - lastIR);
+            display += (int32_t)(IR_Count - lastIR);
             lastIR = IR_Count;
         }
 
-        if (Enc_Dir == 1 && display < 9999999) { display++; Enc_Dir = 0; }
-        if (Enc_Dir == -1 && display > 0)      { display--; Enc_Dir = 0; }
+        /* 正转加计数，反转减计数，支持负数显示 */
+        if (Enc_Dir == 1 && display < 9999999)  { display++; Enc_Dir = 0; }
+        if (Enc_Dir == -1 && display > -999999)  { display--; Enc_Dir = 0; }
 
         OLED_ShowString(1, 1, "Count:");
-        OLED_ShowNum(1, 8, display, 6);
+        OLED_ShowSignedNum(1, 8, display, 6);
         OLED_ShowString(3, 1, "Turn Encoder");
 
         Delay_ms(30);
