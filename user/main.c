@@ -19,7 +19,7 @@ int main(void)
     OLED_ShowString(1, 1, "IR Counter V1.1");
     OLED_ShowString(2, 1, "PA0 debug mode");
     OLED_ShowString(3, 1, "Turn Pot to adj");
-    OLED_ShowString(4, 1, "Sensor threshold");
+    OLED_ShowString(4, 1, "No PB10 button");
     Delay_ms(2000);
     OLED_Clear();
 
@@ -42,20 +42,8 @@ int main(void)
         displayCount += (irCount - lastIrCount);
         lastIrCount = irCount;
 
-        /* PB10 清零 */
-        if (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10) == 0)
-        {
-            Delay_ms(20);
-            if (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10) == 0)
-            {
-                displayCount = 0;
-                lastIrCount = 0;
-                Infrared_SetCount(0);
-                OLED_Clear();
-                while (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10) == 0);
-                Delay_ms(20);
-            }
-        }
+        /* 清零：同时按下编码器按钮(如果PB10接了SW)或用编码器调到0 */
+        /* 注意：如果编码器只有3脚(A/C/B)，PB10不要接任何东西 */
 
         /* 读PA0原始电平 */
         pa0State = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0);
