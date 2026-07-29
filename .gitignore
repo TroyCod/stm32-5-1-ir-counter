@@ -1,0 +1,28 @@
+# Keil build outputs
+Objects/
+Listings/
+DebugConfig/
+*.uvguix.*
+*.bak
+*.dep
+*.crf
+*.d
+*.o
+*.axf
+*.hex
+*.lnp
+*.lst
+*.htm
+*.iex
+*.map
+*.build_log.htm
+*.tra
+JLinkLog.txt
+JLinkSettings.ini
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
