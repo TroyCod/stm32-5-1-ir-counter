@@ -1,5 +1,4 @@
 #include "Encoder.h"
-#include "Delay.h"
 
 static volatile int8_t Encoder_Direction = 0;  // 0=无旋转, 1=顺时针, -1=逆时针
 
@@ -65,8 +64,7 @@ void EXTI1_IRQHandler(void)
 {
     if (EXTI_GetITStatus(EXTI_Line1) != RESET)
     {
-        Delay_ms(2);  // 消抖
-        /* 读取B相电平判断旋转方向 */
+        /* 读取B相电平判断旋转方向（不在ISR中调用Delay！） */
         if (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_11) == 0)
         {
             Encoder_Direction = 1;   // 顺时针 (A相下降沿时B相为低)

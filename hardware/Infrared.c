@@ -14,7 +14,7 @@ void Infrared_Init(void)
     /* 时钟配置 */
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
 
-    /* PA0配置为浮空输入 */
+    /* PA0配置为上拉输入 */
     GPIO_InitTypeDef GPIO_InitStructure;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
